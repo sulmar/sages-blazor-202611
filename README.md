@@ -1,4 +1,4 @@
-# Panel sklepu - materiały ze szkolenia Tworzenie aplikacji Blazor
+# Materiały ze szkolenia Tworzenie aplikacji Blazor
 
 ## Wprowadzenie
 
