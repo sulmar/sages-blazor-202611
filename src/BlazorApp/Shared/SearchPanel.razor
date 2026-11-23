@@ -1,21 +1,31 @@
 ﻿
 
 <div class="input-group">
-    <input type="search" class="form-control" placeholder="Szukaj..." @bind-value="Text" @bind-value:event="oninput" @bind-value:after="Search" />
+    <input @ref="input" type="search" class="form-control" placeholder="Szukaj..." @bind-value="Text" @bind-value:event="oninput" @bind-value:after="Search" />
     <button class="btn btn-outline-primary" type="button" @onclick="Search">Szukaj</button>
 </div>
 
 
 @code {
 
-    [Parameter]
-    public string Text { get; set; } = string.Empty;
+	private ElementReference input;
 
-    [Parameter]
-    public EventCallback<string> TextChanged { get; set; }
 
-    private async Task Search()
-    {
-        await TextChanged.InvokeAsync(Text);
-    }
+	[Parameter]
+	public string Text { get; set; } = string.Empty;
+
+	[Parameter]
+	public EventCallback<string> TextChanged { get; set; }
+
+	private async Task Search()
+	{
+		await TextChanged.InvokeAsync(Text);
+	}
+
+	
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+			await input.FocusAsync();
+	}
 }
