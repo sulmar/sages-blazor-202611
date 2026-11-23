@@ -1,0 +1,25 @@
+@api = http://localhost:5200
+@idp = http://localhost:5143
+
+### Lista produktow (publiczna)
+GET {{api}}/api/products?color=Red
+
+### Jeden produkt
+GET {{api}}/api/products/1
+
+### Logowanie - skopiuj accessToken do zmiennej ponizej
+POST {{idp}}/api/login
+Content-Type: application/json
+
+{ "username": "alice", "password": "alicepass" }
+
+###
+@token = wklej-tutaj-token
+
+### Klienci - wymagaja tokenu pracownika dzialu Sales
+GET {{api}}/api/customers
+Authorization: Bearer {{token}}
+
+### Usuniecie produktu - wymaga roli admin
+DELETE {{api}}/api/products/2
+Authorization: Bearer {{token}}
