@@ -1,34 +1,77 @@
-# Panel sklepu - start szkolenia
+# Panel sklepu - materiały ze szkolenia Tworzenie aplikacji Blazor
 
-Zaplecze sklepu (domena, dane w pamięci, REST API, logowanie) jest gotowe. Twoim zadaniem jest panel w Blazorze.
+## Wprowadzenie
+
+Witaj w repozytorium z materiałami do szkolenia **Tworzenie aplikacji Blazor**.
+
+Repozytorium zawiera **gotowe zaplecze** - model domenowy, dane testowe, REST API sklepu i serwer wystawiający tokeny JWT. Dzięki temu na szkoleniu zajmujemy się wyłącznie Blazorem, a nie pisaniem od zera rzeczy, które i tak już znasz.
+
 Zaplecza nie zmieniasz. Cały kod piszesz w nowym projekcie `src/BlazorApp`, który utworzysz w kroku 1.
 
-## Wymagania
+Do rozpoczęcia kursu potrzebujesz:
 
-- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (wersja zgodna z `src/global.json`)
-- edytor: Visual Studio, Rider albo VS Code z rozszerzeniem C#
-- certyfikat deweloperski, jednorazowo: `dotnet dev-certs https --trust`
+1. [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (wersja zgodna z `src/global.json`)
+2. Edytora: Visual Studio 2026, JetBrains Rider albo Visual Studio Code z rozszerzeniem C# Dev Kit
 
-## Krok 0: uruchom zaplecze
+## Przygotowanie
 
-W dwóch osobnych terminalach, z katalogu `src`:
+1. Sklonuj repozytorium Git
+
+```bash
+git clone https://github.com/sulmar/sages-blazor-202611.git
+cd sages-blazor-202611
+```
+
+2. Zaufaj certyfikatowi deweloperskiemu (jednorazowo, potrzebne do HTTPS)
+
+```bash
+dotnet dev-certs https --trust
+```
+
+3. Zbuduj rozwiązanie
+
+```bash
+cd src
+dotnet build
+```
+
+## Struktura repozytorium
+
+| Katalog | Zawartość |
+| --- | --- |
+| `src/Domain` | Model domenowy (`Product`, `Customer`, `Page<T>`, `ProductStats`) i interfejsy repozytoriów |
+| `src/Infrastructure` | Repozytoria w pamięci, generator danych testowych (Bogus), rejestracja `AddInfrastructure()` |
+| `src/Shop.Api` | REST API produktów i klientów, polityki autoryzacji, hub SignalR `/hubs/products` |
+| `src/IdentityProvider.Api` | Serwer logowania wystawiający token JWT |
+| `src/BlazorCourse.sln` | Rozwiązanie; projekt `BlazorApp` dodasz w kroku 1 |
+| `docs` | `backend.md` - kontrakt zaplecza, `cwiczenia/` - ćwiczenia i wyzwania |
+
+## Uruchomienie zaplecza
+
+Dwie usługi uruchamiasz w osobnych terminalach, z katalogu `src`:
 
 ```bash
 dotnet run --project Shop.Api               # dane sklepu, http://localhost:5200
 dotnet run --project IdentityProvider.Api   # logowanie, http://localhost:5143
 ```
 
-Sprawdź: `http://localhost:5200/health` zwraca `{"status":"ok"}`.
+Sprawdź, czy `Shop.Api` działa: `http://localhost:5200/health` zwraca `{"status":"ok"}`.
 
-Konta do logowania i szczegóły endpointów: [docs/backend.md](docs/backend.md).
+Dane żyją w pamięci procesu. Restart `Shop.Api` przywraca dane startowe.
 
-Ćwiczenia i wyzwania na każdy dzień: [docs/cwiczenia/README.md](docs/cwiczenia/README.md).
+### Użytkownicy testowi
 
 | Login | Hasło | Dostęp |
 | --- | --- | --- |
 | `john` | `123` | odczyt produktów |
 | `bob` | `bobsecure` | + dodawanie i edycja produktów i klientów |
 | `alice` | `alicepass` | + usuwanie produktów |
+
+### Logowanie
+
+`POST http://localhost:5143/api/login` z ciałem `{ "username": "alice", "password": "alicepass" }` zwraca `200 OK` z polem `accessToken` (JWT, ważny 30 minut) albo `401 Unauthorized`. Token wysyłasz w nagłówku `Authorization: Bearer <accessToken>`.
+
+Szczegóły kont, claimów, polityk i endpointów znajdziesz w [docs/backend.md](docs/backend.md).
 
 ## Krok 1: utwórz panel Blazor
 
@@ -58,15 +101,17 @@ Następnie:
 
 Panel działa pod `http://localhost:5221`. Na razie używa repozytoriów w pamięci, czyli danych z `Infrastructure`.
 
-## Co jest w tym repozytorium
+## Ćwiczenia i wyzwania
 
-| Projekt | Rola |
-| --- | --- |
-| `Domain` | modele `Product`, `Customer`, `Page<T>`, `ProductStats` i interfejsy repozytoriów |
-| `Infrastructure` | repozytoria w pamięci z danymi testowymi (Bogus), rejestracja `AddInfrastructure()` |
-| `Shop.Api` | REST API produktów i klientów, polityki autoryzacji, hub SignalR `/hubs/products` |
-| `IdentityProvider.Api` | logowanie, zwraca token JWT |
-| `BlazorApp` | twój panel (krok 1) |
+Szkolenie trwa trzy dni. Każdy dzień składa się z ćwiczeń etapowych, zadań A-E (dni 1 i 2) i wyzwania na koniec dnia. Pełny opis i kryteria akceptacji są w [docs/cwiczenia/README.md](docs/cwiczenia/README.md).
+
+| Dzień | Zadania | Ćwiczenia | Wyzwanie |
+| --- | --- | --- | --- |
+| 1 | A (etap 2), B (etap 3), C (etap 5) | [dzien-1.md](docs/cwiczenia/dzien-1.md), etapy 1-5 | [Wygasające produkty](docs/cwiczenia/dzien-1.md#wyzwanie-dnia-1-wygasające-produkty) |
+| 2 | D (etap 6), E (etap 9) | [dzien-2.md](docs/cwiczenia/dzien-2.md), etapy 6-11 | [Duplikuj produkt](docs/cwiczenia/dzien-2.md#wyzwanie-dnia-2-duplikuj-produkt) |
+| 3 | - | [dzien-3.md](docs/cwiczenia/dzien-3.md), etapy 12-16 | [Drogie produkty na żywo](docs/cwiczenia/dzien-3.md#wyzwanie-dnia-3-drogie-produkty-na-żywo) |
+
+> Gdy coś nie działa, najpierw przeczytaj komunikat w konsoli `dotnet watch` i w konsoli przeglądarki (F12). Sprawdź też, czy działają obie usługi zaplecza.
 
 ## Mapa etapów
 
