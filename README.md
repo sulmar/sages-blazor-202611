@@ -44,7 +44,8 @@ dotnet build
 | `src/Shop.Api` | REST API produktów i klientów, polityki autoryzacji, hub SignalR `/hubs/products` |
 | `src/IdentityProvider.Api` | Serwer logowania wystawiający token JWT |
 | `src/BlazorCourse.sln` | Rozwiązanie; projekt `BlazorApp` dodasz w kroku 1 |
-| `docs` | `backend.md` - kontrakt zaplecza, `cwiczenia/` - ćwiczenia i wyzwania |
+| `docs` | `backend.md` - kontrakt zaplecza |
+| `exercises` | Zadania do wykonania na szkoleniu |
 
 ## Uruchomienie zaplecza
 
@@ -101,15 +102,15 @@ Następnie:
 
 Panel działa pod `http://localhost:5221`. Na razie używa repozytoriów w pamięci, czyli danych z `Infrastructure`.
 
-## Ćwiczenia i wyzwania
+## Zadania
 
-Szkolenie trwa trzy dni. Każdy dzień składa się z ćwiczeń etapowych, zadań A-E (dni 1 i 2) i wyzwania na koniec dnia. Pełny opis i kryteria akceptacji są w [docs/cwiczenia/README.md](docs/cwiczenia/README.md).
-
-| Dzień | Zadania | Ćwiczenia | Wyzwanie |
-| --- | --- | --- | --- |
-| 1 | A (etap 2), B (etap 3), C (etap 5) | [dzien-1.md](docs/cwiczenia/dzien-1.md), etapy 1-5 | [Wygasające produkty](docs/cwiczenia/dzien-1.md#wyzwanie-dnia-1-wygasające-produkty) |
-| 2 | D (etap 6), E (etap 9) | [dzien-2.md](docs/cwiczenia/dzien-2.md), etapy 6-11 | [Duplikuj produkt](docs/cwiczenia/dzien-2.md#wyzwanie-dnia-2-duplikuj-produkt) |
-| 3 | - | [dzien-3.md](docs/cwiczenia/dzien-3.md), etapy 12-16 | [Drogie produkty na żywo](docs/cwiczenia/dzien-3.md#wyzwanie-dnia-3-drogie-produkty-na-żywo) |
+| Zadanie | Ćwiczy |
+| --- | --- |
+| [Dashboard](exercises/dashboard-page.md) | Komponent wielokrotnego użytku, parametry |
+| [Lista produktów](exercises/product-list-page.md) | Pobieranie danych z serwisu, tabela |
+| [Strona produktu](exercises/product-landing-page.md) | Budowa komponentów, przekazywanie danych |
+| [Panel wyszukiwania](exercises/product-search-panel.md) | Query string, parametry trasy |
+| [Formularz z walidacją](exercises/product-form-validation.md) | `EditForm`, DataAnnotations / FluentValidation |
 
 > Gdy coś nie działa, najpierw przeczytaj komunikat w konsoli `dotnet watch` i w konsoli przeglądarki (F12). Sprawdź też, czy działają obie usługi zaplecza.
 
