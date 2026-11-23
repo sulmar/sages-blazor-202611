@@ -1,35 +1,29 @@
 ﻿@page "/customers" 
-@using Domain.Abstractions
-@using Domain.Models
+@using BlazorApp.Shared
+@inject ICustomerRepository Repository
 
 <h3>Customer List</h3>
 
-@if (customers is null)
-{
-	<em>Loading customers...</em>
-}
-else
-{
-
+<Loader Data="customers" Context="customers">
 	<ul>
-		@foreach (Customer customer in customers)
+		@foreach (Customer customer in customers!)
 		{
 			<li>@customer.Id @customer.Name @customer.Email</li>
 		}
 	</ul>
-}
+</Loader>
 
 
 @code {
 
-	[Inject]
-	private ICustomerRepository Repository { get; set; }
+	// [Inject]
+	// private ICustomerRepository Repository { get; set; }
 
 	private IEnumerable<Customer>? customers;
 
 	protected override async Task OnInitializedAsync()
 	{
-		customers = await Repository.GetAllAsync();		
+		customers = await Repository.GetAllAsync();
 	}
 
 

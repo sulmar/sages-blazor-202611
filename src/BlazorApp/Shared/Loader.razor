@@ -1,0 +1,32 @@
+﻿@typeparam TData where TData : class
+
+@if (Data is null)
+{
+	@if (Loading is not null)
+	{
+		@Loading
+	}
+	else
+	{
+		<em>Loading...</em>
+	}
+
+}
+else
+{
+	@ChildContent(Data) // Przekazujemy obiekt poprzez Context
+}
+
+
+@code {
+
+	[Parameter]
+	public TData? Data { get; set; }
+
+	[Parameter]
+	public RenderFragment? Loading { get; set; }
+
+	[Parameter]
+	public required RenderFragment<TData> ChildContent { get; set; }
+
+}
