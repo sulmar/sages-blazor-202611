@@ -1,7 +1,7 @@
-﻿
+﻿@implements IDisposable
 
 <div class="input-group">
-    <input @ref="input" type="search" class="form-control" placeholder="Szukaj..." @bind-value="Text" @bind-value:event="oninput" @bind-value:after="Search" />
+	<input @ref="input" type="search" class="form-control" placeholder="Szukaj..." @bind-value="Text" @bind-value:event="oninput" @bind-value:after="OnTextChangedAsync" />
     <button class="btn btn-outline-primary" type="button" @onclick="Search">Szukaj</button>
 </div>
 
@@ -10,6 +10,11 @@
 
 	private ElementReference input;
 
+	[Parameter]
+	public int DebounceMiliseconds { get; set; } = 300;
+
+	private CancellationTokenSource? debounce;
+
 
 	[Parameter]
 	public string Text { get; set; } = string.Empty;
@@ -17,15 +22,43 @@
 	[Parameter]
 	public EventCallback<string> TextChanged { get; set; }
 
+	private async Task OnTextChangedAsync()
+	{
+		// Debounce: każdy kolejny znak anuluje poprzednie oczekiwanie
+		debounce?.Cancel();
+		debounce?.Dispose();
+
+		debounce = new CancellationTokenSource();
+
+		try
+		{
+			await Task.Delay(DebounceMiliseconds, debounce.Token);
+		}
+		catch(TaskCanceledException)
+		{
+			return;
+		}
+
+		await Search();
+
+	}
+
 	private async Task Search()
 	{
 		await TextChanged.InvokeAsync(Text);
 	}
 
-	
+
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
+		// Element <input> istnieje dopiero po wyrenderowaniu, więc nie można się do niego odwołać w OnInitialized
 		if (firstRender)
 			await input.FocusAsync();
+	}
+
+	public void Dispose()
+	{
+		debounce?.Cancel();
+		debounce?.Dispose();
 	}
 }
