@@ -5,12 +5,31 @@
 <h3>Customer List</h3>
 
 <Loader Data="customers" Context="customers">
-	<ul>
-		@foreach (Customer customer in customers!)
-		{
-			<li>@customer.Id @customer.Name @customer.Email</li>
-		}
-	</ul>
+	<table class="table table-striped align-middle">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Name</th>
+				<th>Email</th>
+			</tr>
+		</thead>
+
+		<tbody>
+
+			@foreach (Customer customer in customers!)
+			{
+				<tr>
+					<td>@customer.Id</td>
+					<td>@customer.Name</td>
+					<td>@customer.Email</td>					
+				</tr>
+			}
+		</tbody>
+
+		<tfoot>
+			<tr>@customers.Count()</tr>
+		</tfoot>
+	</table>
 </Loader>
 
 
