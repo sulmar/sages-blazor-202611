@@ -2,7 +2,9 @@
 
 <div class="input-group">
 	<input @ref="input" type="search" class="form-control" placeholder="Szukaj..." @bind-value="Text" @bind-value:event="oninput" @bind-value:after="OnTextChangedAsync" />
-    <button class="btn btn-outline-primary" type="button" @onclick="Search">Szukaj</button>
+    <button class="btn btn-outline-primary" type="button" @onclick="@Search">Szukaj</button>
+	<button class="btn btn-outline-secondary" type="button" @onclick="@Clear" >Wyczyść</button>
+
 </div>
 
 
@@ -46,6 +48,14 @@
 	private async Task Search()
 	{
 		await TextChanged.InvokeAsync(Text);
+	}
+
+	private async Task Clear()
+	{
+		debounce?.Cancel();
+		Text = string.Empty;
+		await Search();
+		await input.FocusAsync();
 	}
 
 
