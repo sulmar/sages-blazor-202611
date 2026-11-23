@@ -1,0 +1,21 @@
+﻿
+
+<div class="input-group">
+    <input type="search" class="form-control" placeholder="Szukaj..." @bind-value="Text" @bind-value:event="oninput" @bind-value:after="Search" />
+    <button class="btn btn-outline-primary" type="button" @onclick="Search">Szukaj</button>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public string Text { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<string> TextChanged { get; set; }
+
+    private async Task Search()
+    {
+        await TextChanged.InvokeAsync(Text);
+    }
+}

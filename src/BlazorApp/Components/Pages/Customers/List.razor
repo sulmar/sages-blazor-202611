@@ -3,10 +3,7 @@
 
 <h3>Customer List</h3>
 
-<div class="input-group">    
-    <input type="search" class="form-control" placeholder="Szukaj..." @bind="text" @bind:event="oninput" @bind:after="Search" />
-    <button class="btn btn-outline-primary" type="button" @onclick="Search">Szukaj</button>
-</div>
+<SearchPanel TextChanged="Search" />
 
 
 <Loader Data="customers" Context="customers">
@@ -14,10 +11,8 @@
 </Loader>
 
 @code {
-
-    private string? text { get; set; } = "a";
-
-	private void Search()
+    
+	private void Search(string text)
 	{
 		Console.WriteLine($"Search customers by {text}");
 	}
