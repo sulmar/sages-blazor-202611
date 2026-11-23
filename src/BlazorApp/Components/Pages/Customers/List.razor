@@ -3,11 +3,24 @@
 
 <h3>Customer List</h3>
 
+<div class="input-group">    
+    <input type="search" class="form-control" placeholder="Szukaj..." @bind-value="Value" /> 
+    <button class="btn btn-outline-primary" type="button" @onclick="Search">Szukaj</button>
+</div>
+
+
 <Loader Data="customers" Context="customers">
 	<CustomerTable customers="customers" />	
 </Loader>
 
 @code {
+
+    private string? Value { get; set; } = "a";
+
+	private void Search()
+	{
+		Console.WriteLine(Value);
+	}
 
     private IEnumerable<Customer>? customers;
 
