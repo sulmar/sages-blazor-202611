@@ -1,10 +1,19 @@
 using BlazorApp.Components;
+using Bogus;
+using Domain.Abstractions;
+using Domain.Models;
+using Infrastructure.Fakers;
+using Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddTransient<ICustomerRepository, InMemoryCustomerRepository>();
+builder.Services.AddTransient<Faker<Customer>, CustomerFaker>();
+builder.Services.AddTransient<IEnumerable<Customer>>(sp => sp.GetRequiredService<Faker<Customer>>().Generate(20));
 
 var app = builder.Build();
 
