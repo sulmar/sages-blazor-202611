@@ -1,0 +1,30 @@
+﻿@using BlazorApp.Shared
+<h3>CustomerTable</h3>
+
+<DataTable Items="customers" Context="customer">
+
+		<Header>
+			<th>Id</th>
+			<th>Name</th>
+			<th>Email</th>
+		</Header>
+
+		<Row>
+			<td>@customer.Id</td>
+			<td>@customer.Name</td>
+			<td>@customer.Email</td>
+		</Row>
+
+		<Footer>
+			<td colspan="3">Count: @customers.Count()</td>
+		</Footer>
+
+	</DataTable>
+
+
+@code {
+
+	[Parameter]
+	public IEnumerable<Customer> customers { get; set; }
+
+}
