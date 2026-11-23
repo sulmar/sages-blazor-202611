@@ -1,74 +1,77 @@
-﻿@implements IDisposable
+﻿@using BlazorApp.Services
+@implements IDisposable
 
 <div class="input-group">
-	<input @ref="input" type="search" class="form-control" placeholder="Szukaj..." @bind-value="Text" @bind-value:event="oninput" @bind-value:after="OnTextChangedAsync" />
-    <button class="btn btn-outline-primary" type="button" @onclick="@Search">Szukaj</button>
-	<button class="btn btn-outline-secondary" type="button" @onclick="@Clear" >Wyczyść</button>
+    <input @ref="input"
+           type="search"
+           class="form-control"
+           placeholder="Szukaj..."
+           @bind-value="inputText"
+           @bind-value:event="oninput"
+           @bind-value:after="OnTextChangedAsync" />
 
+    <button class="btn btn-outline-primary"
+            type="button"
+            @onclick="Search">
+        Szukaj
+    </button>
+
+    <button class="btn btn-outline-secondary"
+            type="button"
+            @onclick="Clear">
+        Wyczyść
+    </button>
 </div>
 
-
 @code {
+    private ElementReference input;
+    private readonly Debouncer debouncer = new();
+    private string inputText = string.Empty;
 
-	private ElementReference input;
+    [Parameter]
+    public int DebounceMiliseconds { get; set; } = 300;
 
-	[Parameter]
-	public int DebounceMiliseconds { get; set; } = 300;
+    [Parameter]
+    public EventCallback<string> TextChanged { get; set; }
 
-	private CancellationTokenSource? debounce;
+    private Task OnTextChangedAsync()
+    {
+        return NotifyAfterAsync(DebounceMiliseconds);
+    }
 
+    private Task Search()
+    {
+        return NotifyAfterAsync(0);
+    }
 
-	[Parameter]
-	public string Text { get; set; } = string.Empty;
+    private Task NotifyAfterAsync(int milliseconds)
+    {
+        var text = inputText;
 
-	[Parameter]
-	public EventCallback<string> TextChanged { get; set; }
+        return debouncer.DebounceAsync(milliseconds, async token =>
+        {
+            token.ThrowIfCancellationRequested();
+            await TextChanged.InvokeAsync(text);
+        });
+    }
 
-	private async Task OnTextChangedAsync()
-	{
-		// Debounce: każdy kolejny znak anuluje poprzednie oczekiwanie
-		debounce?.Cancel();
-		debounce?.Dispose();
+    private async Task Clear()
+    {
+        inputText = string.Empty;
+        await Search();
+        await input.FocusAsync();
+    }
 
-		debounce = new CancellationTokenSource();
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await input.FocusAsync();
+        }
+    }
 
-		try
-		{
-			await Task.Delay(DebounceMiliseconds, debounce.Token);
-		}
-		catch(TaskCanceledException)
-		{
-			return;
-		}
-
-		await Search();
-
-	}
-
-	private async Task Search()
-	{
-		await TextChanged.InvokeAsync(Text);
-	}
-
-	private async Task Clear()
-	{
-		debounce?.Cancel();
-		Text = string.Empty;
-		await Search();
-		await input.FocusAsync();
-	}
-
-
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		// Element <input> istnieje dopiero po wyrenderowaniu, więc nie można się do niego odwołać w OnInitialized
-		if (firstRender)
-			await input.FocusAsync();
-	}
-
-	public void Dispose()
-	{
-		debounce?.Cancel();
-		debounce?.Dispose();
-	}
+    public void Dispose()
+    {
+        debouncer.Dispose();
+    }
 }
