@@ -1,7 +1,7 @@
 ﻿@typeparam TItem
 
 
-<table class="table table-striped align-middle">
+<table class="table table-striped align-middle table-@Theme">
 	<thead>
 		<tr>
 			@Header
@@ -38,5 +38,8 @@
 
 	[Parameter]
 	public RenderFragment? Footer { get; set; }
+
+	[Parameter]
+	public string Theme { get; set; }
 
 }

@@ -6,11 +6,10 @@ public static class QrCodeEndpoints
 {
     private const int MaxDataLength = 500;
 
-    public static IEndpointConventionBuilder MapQrCode(this IEndpointRouteBuilder app)
-    {
+    public static IEndpointConventionBuilder MapQrCode(this IEndpointRouteBuilder app) =>
         // GET api/qrcode?data=
-        return app.MapGet("/api/qrcode", (string data) =>
-        {            
+        app.MapGet("/api/qrcode", (string data) =>
+        {
             if (string.IsNullOrWhiteSpace(data) || data.Length > MaxDataLength)
                 return Results.BadRequest($"Parametr data jest wymagany i może mieć maksymalną długosc {MaxDataLength} znaków");
 
@@ -21,5 +20,4 @@ public static class QrCodeEndpoints
 
             return Results.File(png, "image/png");
         });
-    }
 }

@@ -6,7 +6,13 @@
     </div>
 
     <main>
+
+
+
         <div class="top-row px-4">
+
+            <button class="btn btn-@theme" @onclick="ToggleTheme">Zmień motyw - aktualnie: @theme</button>
+
             <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
         </div>
 
@@ -21,3 +27,14 @@
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+@code {
+
+
+    private string theme = "Light";
+
+    private void ToggleTheme()
+    {
+        theme = theme == "light" ? "dark" : "light";
+    }
+}
