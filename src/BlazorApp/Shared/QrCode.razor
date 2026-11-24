@@ -1,0 +1,11 @@
+﻿
+<img src="api/qrcode?data=@(Uri.EscapeDataString(Value))" width="@Size" height="@Size" alt="Kod QR: @Value" />
+
+@code {
+
+	[Parameter, EditorRequired]
+	public required string Value { get; set; }
+
+	[Parameter]
+	public int Size { get; set; } = 200;
+}

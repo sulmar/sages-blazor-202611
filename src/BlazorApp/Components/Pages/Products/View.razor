@@ -1,0 +1,26 @@
+﻿@page "/products/{Id:int}/view"
+@inject IProductRepository Repository
+
+<h3>View</h3>
+
+<Loader Data="product">
+
+	<h4>@product!.Name</h4>
+
+	<QrCode Value="@product.Code"></QrCode>
+
+</Loader>
+
+@code {
+
+	[Parameter]
+	public int Id { get; set; }
+
+	private Product? product;
+
+	protected override async Task OnParametersSetAsync()
+	{
+		product = await Repository.GetByIdAsync(Id);
+	}
+
+}
