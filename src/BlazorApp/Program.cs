@@ -24,6 +24,12 @@ builder.Services.AddSingleton<IProductRepository, InMemoryProductRepository>();
 builder.Services.AddTransient<Faker<Product>, ProductFaker>();
 builder.Services.AddTransient<IEnumerable<Product>>(sp => sp.GetRequiredService<Faker<Product>>().Generate(20));
 
+
+// Rejestracja parametrów kaskadowych globalnie
+builder.Services.AddCascadingValue("a", _ => 5); 
+builder.Services.AddCascadingValue("b", _ => 1);
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
