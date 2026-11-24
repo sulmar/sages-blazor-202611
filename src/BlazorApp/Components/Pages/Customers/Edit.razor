@@ -1,6 +1,7 @@
 ﻿@page "/customers/{Id:int}/edit"
 @inject ICustomerRepository Repository
 @inject NavigationManager Navigation
+@using Blazored.FluentValidation
 
 <h3>Edit Customer @Id</h3>
 
@@ -19,7 +20,9 @@
 	
 	<EditForm Model="customer" OnValidSubmit="OnSave" Context="customerForm">
 
-		<DataAnnotationsValidator />
+		<FluentValidationValidator />
+
+		@* <DataAnnotationsValidator /> *@
 
 		<ValidationSummary />
 
