@@ -1,7 +1,7 @@
 ﻿@using BlazorApp.Shared
 <h3>CustomerTable</h3>
 
-<DataTable Items="customers" Context="customer" Theme="@Theme">
+<DataTable Items="customers" Context="customer">
 
 		<Header>
 			<th>Id</th>
@@ -28,8 +28,5 @@
 
 	[Parameter]
 	public IEnumerable<Customer> customers { get; set; }
-
-	[Parameter]
-	public string Theme { get; set; }
-
+	
 }

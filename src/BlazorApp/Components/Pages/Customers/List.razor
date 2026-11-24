@@ -10,13 +10,11 @@
 
 
 <Loader Data="customers" Context="customers">
-	<CustomerTable customers="customers" Theme="@Theme" />	
+	<CustomerTable customers="customers" />	
 </Loader>
 
 @code {
-
-    [Parameter]
-    public string Theme { get; set; } = "dark";
+    
     
 	private void Search(string text)
 	{
