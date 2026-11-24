@@ -1,4 +1,5 @@
 using BlazorApp.Components;
+using BlazorApp.Endpoints;
 using Bogus;
 using Domain.Abstractions;
 using Domain.Models;
@@ -41,29 +42,8 @@ app.MapStaticAssets();
     app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
+app.MapCustomer();
 
-app.MapPost("/customers/{Id:int}/edit", (int id, [FromForm] Customer customer) =>
-{
-
-
-    return Results.Redirect("/customers");
-}); //.DisableAntiforgery();
-
-
-// GET api/qrcode?data=
-app.MapGet("/api/qrcode", (string data) =>
-{
-    const int MaxDataLength = 500;
-
-    if (string.IsNullOrWhiteSpace(data) || data.Length > MaxDataLength)
-        return Results.BadRequest($"Parametr data jest wymagany i może mieć maksymalną długosc {MaxDataLength} znaków");
-
-    using var generator = new QRCodeGenerator();
-    using var qrData = generator.CreateQrCode(data, QRCodeGenerator.ECCLevel.M);
-
-    var png = new PngByteQRCode(qrData).GetGraphic(pixelsPerModule: 10);
-
-    return Results.File(png, "image/png");
-});
+app.MapQrCode();
 
 app.Run();
