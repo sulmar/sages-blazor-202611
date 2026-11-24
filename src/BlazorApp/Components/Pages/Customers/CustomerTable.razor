@@ -3,30 +3,37 @@
 
 <DataTable Items="customers" Context="customer">
 
-		<Header>
-			<th>Id</th>
-			<th>Name</th>
-			<th>Email</th>
-			<th></th>
-		</Header>
+	<Header>
+		<th>Id</th>
+		<th>Name</th>
+		<th>Email</th>
+		<th></th>
+	</Header>
 
-		<Row>
-			<td>@customer.Id</td>
-			<td>@customer.Name</td>
-			<td>@customer.Email</td>
-			<td><a href="/customers/@customer.Id/edit" class="btn btn-primary">Edytuj</a></td>
-		</Row>
+	<Row>
+		<td>@customer.Id</td>
+		<td>@customer.Name</td>
+		<td>@customer.Email</td>
+		<td>
+			<a href="/customers/@customer.Id/edit" class="btn btn-primary">Edytuj</a>
+			<button class="btn btn-danger" @onclick="() => OnDelete.InvokeAsync(customer)">Usuń</button>
+		</td>
+			
+	</Row>
 
-		<Footer>
-			<td colspan="3">Count: @customers.Count()</td>
-		</Footer>
+	<Footer>
+		<td colspan="3">Count: @customers.Count()</td>
+	</Footer>
 
-	</DataTable>
+</DataTable>
 
 
 @code {
 
 	[Parameter]
 	public IEnumerable<Customer> customers { get; set; }
+
+	[Parameter]
+	public EventCallback<Customer> OnDelete { get; set; }
 	
 }

@@ -1,5 +1,6 @@
 ﻿@page "/customers" 
 @inject ICustomerRepository Repository
+@inject NavigationManager Navigation
 
 <h3>Customer List</h3>
 
@@ -10,22 +11,32 @@
 
 
 <Loader Data="customers" Context="customers">
-	<CustomerTable customers="customers" />	
+	<CustomerTable customers="customers" OnDelete="Delete" />	
 </Loader>
 
 @code {
-    
-    
-	private void Search(string text)
-	{
-		Console.WriteLine($"Search customers by {text}");
-	}
+
+
+    private void Search(string text)
+    {
+        Console.WriteLine($"Search customers by {text}");
+    }
 
     private IEnumerable<Customer>? customers;
 
     protected override async Task OnInitializedAsync()
     {
         customers = await Repository.GetAllAsync();
+    }
+
+    private async Task Delete(Customer customer)
+    {
+        await Repository.DeleteAsync(customer.Id);
+
+        customers = await Repository.GetAllAsync();        
+
+        Navigation.NavigateTo("customers");
+
     }
 
 
