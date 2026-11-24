@@ -1,4 +1,6 @@
 ﻿@page "/counter"
+@using BlazorApp.Services
+@inject LocalStorageService Storage
 @inject IJSRuntime JS
 
 <PageTitle>Counter</PageTitle>
@@ -18,20 +20,17 @@
 	{
 		currentCount++;
 
-		await JS.InvokeVoidAsync("localStorage.setItem", "counter", currentCount.ToString());
+		await Storage.SetAsync("counter", currentCount);
 	}
 
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		if (!firstRender)
-			return;
+		// if (!firstRender)
+		// 	return;
 
-		var saved = await JS.InvokeAsync<string?>("localStorage.getItem", "counter");
-
-		if (int.TryParse(saved, out var value))
-			currentCount = value;
-
+		currentCount = await Storage.GetAsync<int>("counter");
+	
 		StateHasChanged(); // Notyfikacja kontrolek
 	}
 

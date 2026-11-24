@@ -1,7 +1,8 @@
 ﻿@page "/customers" 
+@using BlazorApp.Services
 @inject ICustomerRepository Repository
 @inject NavigationManager Navigation
-@inject IJSRuntime JS
+@inject DialogService Dialog
 
 <h3>Customer List</h3>
 
@@ -32,7 +33,7 @@
 
     private async Task Delete(Customer customer)
     {
-        bool confirmed = await JS.InvokeAsync<bool>("confirm", $"Czy chcesz usunąć klienta {customer.Name}?");
+        bool confirmed = await Dialog.ConfirmAsync($"Czy chcesz usunąć klienta {customer.Name}?");
 
         if (confirmed)
         {

@@ -1,5 +1,6 @@
 using BlazorApp.Components;
 using BlazorApp.Endpoints;
+using BlazorApp.Services;
 using Bogus;
 using Domain.Abstractions;
 using Domain.Models;
@@ -29,6 +30,8 @@ builder.Services.AddTransient<IEnumerable<Product>>(sp => sp.GetRequiredService<
 builder.Services.AddCascadingValue("a", _ => 5); 
 builder.Services.AddCascadingValue("b", _ => 1);
 
+builder.Services.AddScoped<DialogService>();
+builder.Services.AddScoped<LocalStorageService>();
 
 var app = builder.Build();
 
