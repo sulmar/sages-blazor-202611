@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddTransient<ICustomerRepository, InMemoryCustomerRepository>();
+builder.Services.AddSingleton<ICustomerRepository, InMemoryCustomerRepository>();
 builder.Services.AddTransient<Faker<Customer>, CustomerFaker>();
 builder.Services.AddTransient<IEnumerable<Customer>>(sp => sp.GetRequiredService<Faker<Customer>>().Generate(20));
 
@@ -38,6 +38,8 @@ app.MapStaticAssets();
 app.MapPost("/customers/{Id:int}/edit", (int id, [FromForm] Customer customer) =>
 {
 
+
+    return Results.Redirect("/customers");
 }); //.DisableAntiforgery();
 
 app.Run();
