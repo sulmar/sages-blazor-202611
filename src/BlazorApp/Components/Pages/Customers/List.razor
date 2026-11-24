@@ -1,6 +1,7 @@
 ﻿@page "/customers" 
 @inject ICustomerRepository Repository
 @inject NavigationManager Navigation
+@inject IJSRuntime JS
 
 <h3>Customer List</h3>
 
@@ -31,11 +32,16 @@
 
     private async Task Delete(Customer customer)
     {
-        await Repository.DeleteAsync(customer.Id);
+        bool confirmed = await JS.InvokeAsync<bool>("confirm", $"Czy chcesz usunąć klienta {customer.Name}?");
 
-        customers = await Repository.GetAllAsync();        
-
+        if (confirmed)
+        {
+            await Repository.DeleteAsync(customer.Id);
+        }
+        
+        customers = await Repository.GetAllAsync();
         Navigation.NavigateTo("customers");
+        
 
     }
 

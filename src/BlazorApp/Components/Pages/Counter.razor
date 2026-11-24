@@ -1,4 +1,5 @@
 ﻿@page "/counter"
+@inject IJSRuntime JS
 
 <PageTitle>Counter</PageTitle>
 
@@ -8,11 +9,20 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
+
+<button class="btn btn-secondary" @onclick="ShowAlert">Alert!</button>
+
 @code {
     private int currentCount = 0;
 
     private void IncrementCount()
     {
         currentCount++;
+    }
+
+    private async Task ShowAlert()
+    {
+        // alert('Hello from Blazor!')
+        await JS.InvokeVoidAsync("alert", "Hello from Blazor!");
     }
 }
