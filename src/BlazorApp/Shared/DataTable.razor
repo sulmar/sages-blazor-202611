@@ -10,7 +10,7 @@
 
 	<tbody>
 
-		@foreach (var item in Items.Take(PageSize))
+		@foreach (var item in Items.Skip(StartNumber * PageSize).Take(PageSize))
 		{
 			<tr>@Row(item)</tr>
 		}
@@ -42,7 +42,11 @@
 	[CascadingParameter]
 	public string Theme { get; set; }
 
-	[CascadingParameter]
+	[CascadingParameter(Name = "a")]
 	public int PageSize { get; set; }
+
+	[CascadingParameter(Name = "b")]
+	public int StartNumber { get; set; }
+
 
 }

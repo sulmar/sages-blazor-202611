@@ -17,12 +17,17 @@
 		</div>
 
 		<CascadingValue Value="@theme">
-			<CascadingValue Value="@pageSize">
 
-				<article class="content px-4">
-					@Body
-				</article>
+			<CascadingValue Value="@startNumber" Name="b">
 
+			<CascadingValue Value="@pageSize" Name="a">
+				
+			
+					<article class="content px-4">
+						@Body
+					</article>
+
+				</CascadingValue>
 			</CascadingValue>
 		</CascadingValue>
 
@@ -48,4 +53,6 @@
 	}
 
 	private int pageSize = 5;
+
+	private int startNumber = 2;
 }
