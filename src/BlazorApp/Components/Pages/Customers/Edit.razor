@@ -1,0 +1,32 @@
+﻿@page "/customers/{Id:int}/edit"
+@inject ICustomerRepository Repository
+
+<h3>Edit Customer @Id</h3>
+
+<Loader Data="@customer">
+
+	<form method="post">
+
+		<AntiforgeryToken />
+
+		<input name="id" type="hidden" value="@customer.Id" />
+		<input id="firstname" name="name" value="abc" />
+		<input id="email" name="email" value="a@b.com" />
+		<button type="submit">Zapisz</button>
+	</form>
+	
+</Loader>
+
+@code {
+
+	[Parameter]
+	public int Id { get; set; }
+
+	private Customer? customer;
+
+	protected override async Task OnParametersSetAsync()
+	{
+		customer = await Repository.GetByIdAsync(Id);
+	}
+
+}

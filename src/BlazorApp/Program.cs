@@ -4,6 +4,7 @@ using Domain.Abstractions;
 using Domain.Models;
 using Infrastructure.Fakers;
 using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,5 +33,11 @@ app.UseAntiforgery();
 app.MapStaticAssets();
     app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+
+app.MapPost("/customers/{Id:int}/edit", (int id, [FromForm] Customer customer) =>
+{
+
+}); //.DisableAntiforgery();
 
 app.Run();
