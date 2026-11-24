@@ -1,7 +1,7 @@
 ﻿@typeparam TItem
 
 
-<table class="table table-striped align-middle table-@Theme">
+<table class="table table-striped align-middle table-@Theme" >
 	<thead>
 		<tr>
 			@Header
@@ -10,7 +10,7 @@
 
 	<tbody>
 
-		@foreach (var item in Items)
+		@foreach (var item in Items.Take(PageSize))
 		{
 			<tr>@Row(item)</tr>
 		}
@@ -41,5 +41,8 @@
 
 	[CascadingParameter]
 	public string Theme { get; set; }
+
+	[CascadingParameter]
+	public int PageSize { get; set; }
 
 }
