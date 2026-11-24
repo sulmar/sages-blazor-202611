@@ -1,0 +1,41 @@
+@using Blazored.FluentValidation
+
+<EditForm Model="Customer" OnValidSubmit="() => OnSave.InvokeAsync(Customer)" Context="customerForm">
+
+	<FluentValidationValidator />
+
+	@* <DataAnnotationsValidator /> *@
+
+	<ValidationSummary />
+
+	<label>Nazwa</label>
+	<InputText id="firstname" name="name" @bind-Value=Customer.Name />
+	<ValidationMessage For="() => Customer.Name" />
+
+	<label>Email</label>
+	<InputText id="email" name="email" @bind-Value=Customer.Email />
+	<ValidationMessage For="() => Customer.Email" />
+
+	@if (AdditionalFields is not null)
+	{
+		@AdditionalFields(Customer)
+	}
+
+	<button type="submit" class="btn btn-primary">Zapisz</button>
+
+</EditForm>
+
+
+@code {
+
+	[Parameter, EditorRequired]
+	public Customer Customer { get; set; }
+
+	[Parameter]
+	public EventCallback<Customer> OnSave { get; set; }
+
+	[Parameter]
+	public RenderFragment<Customer>? AdditionalFields { get; set; }
+
+
+}

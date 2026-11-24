@@ -12,5 +12,6 @@ public class CustomerValidator : AbstractValidator<Customer>
     {
         RuleFor(p => p.Name).MinimumLength(3).MaximumLength(100).NotEmpty();
         RuleFor(p => p.Email).EmailAddress().NotEmpty();
+        RuleFor(p => p.Phone).Matches("^\\+48\\d*");
     }
 }

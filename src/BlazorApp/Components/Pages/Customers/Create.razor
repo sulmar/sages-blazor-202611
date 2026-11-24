@@ -1,33 +1,21 @@
 ﻿@page "/customers/create"
 @inject ICustomerRepository Repository
 @inject NavigationManager Navigation
-@using Blazored.FluentValidation
 
 
 <h3>Create</h3>
 
-
-<EditForm Model="customer" OnValidSubmit="OnSave" Context="customerForm">
-
-		<FluentValidationValidator />
-
-		@* <DataAnnotationsValidator /> *@
-
-		<ValidationSummary />
-
-		<InputText id="firstname" name="name" @bind-Value=customer.Name />
-		<ValidationMessage For="() => customer.Name" />
-
-		<InputText id="email" name="email" @bind-Value=customer.Email />
-		<ValidationMessage For="() => customer.Email" />
-
-		<button type="submit" class="btn btn-primary">Zapisz</button>
-	</EditForm>
+<CustomerForm Customer="@customer" OnSave="@OnSave">
+	<AdditionalFields Context="model">
+		<label>Telefon</label>
+		<InputText @bind-Value="model.Phone" />
+		<ValidationMessage For="() => model.Phone" />
+	</AdditionalFields>
+</CustomerForm>
 
 @code {
 
-	private Customer customer = new Customer { Name  = string.Empty, Email = string.Empty };
-
+	private Customer customer = new Customer { Name = string.Empty, Email = string.Empty };
 
 	private async Task OnSave()
 	{
