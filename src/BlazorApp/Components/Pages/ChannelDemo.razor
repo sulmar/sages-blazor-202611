@@ -1,0 +1,88 @@
+﻿@page "/channel"
+@using Microsoft.JSInterop
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+
+<p>
+	Otwórz
+	<a href="channel" target="_blank" rel="noopener noreferrer">
+		/channel w nowej karcie
+	</a>.
+	Kliknięcie w jednej karcie zaktualizuje licznik w drugiej.
+
+	<a href="https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel"
+	   target="_blank"
+	   rel="noopener noreferrer">
+		BroadcastChannel — dokumentacja MDN
+	</a>
+	nie zapisuje wartości w localStorage —
+	przesyła wiadomości między odbiorcami.
+</p>
+
+
+<p>Licznik: @count</p>
+
+<button class="btn btn-outline-success" @onclick="Increment" disabled="@(channel is null)">
+	Zwiększ i wyślij do innych kart
+</button>
+
+@code {
+	private int count;
+	private IJSObjectReference? module;
+	private IJSObjectReference? channel;
+	private DotNetObjectReference<ChannelDemo>? reference;
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (!firstRender)
+			return;
+
+		module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/channel.js");
+
+		reference = DotNetObjectReference.Create(this);
+
+		channel = await module.InvokeAsync<IJSObjectReference>("connect", reference);
+
+		StateHasChanged();
+	}
+
+	private async Task Increment()
+	{
+		count++;
+		await channel!.InvokeVoidAsync("send", count);
+	}
+
+	[JSInvokable]
+	public Task ReceiveMessage(int value)
+	{
+		return InvokeAsync(() =>
+		{
+			count = value;
+			StateHasChanged();
+		});
+	}
+
+	public async ValueTask DisposeAsync()
+	{
+		try
+		{
+			if (channel is not null)
+			{
+				await channel.InvokeVoidAsync("close");
+				await channel.DisposeAsync();
+			}
+
+			if (module is not null)
+				await module.DisposeAsync();
+		}
+		catch (JSDisconnectedException)
+		{
+			// Połączenie Blazor Server zostało już zakończone.
+		}
+		finally
+		{
+			reference?.Dispose();
+		}
+	}
+}
