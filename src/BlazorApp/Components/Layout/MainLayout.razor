@@ -13,22 +13,24 @@
 
 			<button class="btn btn-@theme" @onclick="ToggleTheme">Zmień motyw - aktualnie: @theme</button>
 
+			<button class="btn btn-outline-secondary" @onclick="@(() => startNumber++)">Strona +1</button>
+			<button class="btn btn-outline-secondary" @onclick="@(() => startNumber--)">Strona -1</button>
+
 			<a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
 		</div>
 
 		<CascadingValue Value="@theme">
 
-			<CascadingValue Value="@startNumber" Name="b">
-
-			<CascadingValue Value="@pageSize" Name="a">
-				
 			
-					<article class="content px-4">
-						@Body
-					</article>
+			<PagingProvider pageSize="5" startNumber="@startNumber">
+					
+				<article class="content px-4">
+					@Body
+				</article>
 
-				</CascadingValue>
-			</CascadingValue>
+			</PagingProvider>
+
+		
 		</CascadingValue>
 
 
@@ -51,8 +53,7 @@
 	{
 		theme = theme == "light" ? "dark" : "light";
 	}
-
-	private int pageSize = 5;
+	
 
 	private int startNumber = 2;
 }
