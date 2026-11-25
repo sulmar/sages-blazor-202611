@@ -40,7 +40,20 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy(Policies.Sales, policy => policy.RequireClaim("Department", "Sales"))
     .AddPolicy(Policies.Admin, policy => policy.RequireRole("admin"));
 
+
+builder.Services.AddCors(options => options.AddPolicy("BlazorClient", policy => policy
+    .WithOrigins("https://localhost:7080")
+    .WithMethods("GET")
+    .AllowAnyHeader()));
+
+builder.Services.AddCors(options => options.AddPolicy("PublicApi", policy => policy
+    .AllowAnyOrigin()
+    .WithMethods("GET")
+    .AllowAnyHeader()));
+
 var app = builder.Build();
+
+app.UseCors("BlazorClient");
 
 app.UseAuthentication();
 app.UseAuthorization();

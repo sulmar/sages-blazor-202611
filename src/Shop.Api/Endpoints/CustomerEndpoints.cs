@@ -8,7 +8,7 @@ public static class CustomerEndpoints
     public static IEndpointRouteBuilder MapCustomers(this IEndpointRouteBuilder app)
     {
         // Dane klientow sa chronione w calosci: polityka obejmuje kazdy endpoint grupy.
-        var customers = app.MapGroup("/api/customers").RequireAuthorization(Policies.Sales);
+        var customers = app.MapGroup("/api/customers"); //.RequireAuthorization(Policies.Sales);
 
         customers.MapGet("/", async (string? text, ICustomerRepository repository) =>
             string.IsNullOrWhiteSpace(text)

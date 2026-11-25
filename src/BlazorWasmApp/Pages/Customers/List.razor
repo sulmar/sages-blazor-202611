@@ -1,0 +1,30 @@
+﻿@page "/customers"
+@inject HttpClient Http
+
+<h3>Customer List</h3>
+
+@if (customers is null)
+{
+	<em>Loading...</em>
+}
+else
+{
+	<ul>
+		@foreach (var customer in customers)
+		{
+			<li>@customer.Id @customer.Name @customer.Email</li>
+		}
+
+	</ul>
+}
+
+@code {
+
+	private IEnumerable<Customer>? customers;
+
+	protected override async Task OnInitializedAsync()
+	{
+		customers = await Http.GetFromJsonAsync<IEnumerable<Customer>>("api/customers");
+	}
+
+}
