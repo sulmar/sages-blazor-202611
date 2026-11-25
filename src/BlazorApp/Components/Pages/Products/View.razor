@@ -9,6 +9,9 @@
 
 	<QrCode Value="@product.Code"></QrCode>
 
+
+	<CameraCapture OnCaptured="SavePhotoAsync" />
+
 </Loader>
 
 @code {
@@ -21,6 +24,12 @@
 	protected override async Task OnParametersSetAsync()
 	{
 		product = await Repository.GetByIdAsync(Id);
+	}
+
+
+	private async Task SavePhotoAsync(Stream photo)
+	{
+		
 	}
 
 }

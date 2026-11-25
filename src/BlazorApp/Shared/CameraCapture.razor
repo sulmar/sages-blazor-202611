@@ -1,7 +1,8 @@
 ﻿@using Microsoft.JSInterop
 @inject IJSRuntime JS
+@implements IAsyncDisposable
 
-<video autoplay muted playsinline class="rounded w-100" style="max-width:400px"></video>
+<video @ref="video" autoplay muted playsinline class="rounded w-100" style="max-width:400px"></video>
 
 <div class="d-flex flex-wrap gap-2 mt-2">
 	<button type="button" @onclick="StartAsync" class="btn btn-outline-primary">Włącz kamerę</button>
@@ -10,6 +11,11 @@
 </div>
 
 
+@if (error is not null)
+{
+	<p class="text-danger" role="alert">@error</p>
+}
+
 @code {
 
 	[Parameter]
@@ -17,19 +23,75 @@
 
 	private IJSObjectReference? module;
 
+	private DotNetObjectReference<CameraCapture> reference;
+
+	private ElementReference video;
+
+	private string? error;
+
+	private const long MaxPhotoSize = 5 * 1024 * 1024;
+
 	private async Task StartAsync()
 	{
-		module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/channel.js");
+		try
+		{
+			module = await JS.InvokeAsync<IJSObjectReference>("import", "./Shared/CameraCapture.razor.js");
+
+			reference = DotNetObjectReference.Create(this);
+
+			await module.InvokeVoidAsync("start", video, reference);
+		}
+		catch(JSException)
+		{
+			error = "Nie udało się uruchomić kamery. Sprawdz uprawnienia przeglądarki.";
+		}
 	}
 
 	private async Task CaptureAsync()
 	{
-		
+		try
+		{
+			var photo = await module.InvokeAsync<IJSStreamReference>("capture", video);
+
+			await using var stream = await photo.OpenReadStreamAsync(MaxPhotoSize);		
+			await OnCaptured.InvokeAsync(stream);		
+		}
+		catch(JSException)
+		{
+			error = "Nie udało się zrobić zdjęcia. Poczekaj na obraz z kamery.";
+		}
+
 	}
 
 	private async Task StopAsync()
 	{
-		
+		await module.InvokeVoidAsync("stop", video);
 	}
 
+
+	[JSInvokable]
+	public void OnCameraEnded()
+	{
+		error = "Kamera została wyłączona.";
+
+		// Zgłoszenie przychodzi spoza Blazora, więc sami rozgłaszamy potrzebę oświeżenie widoku.
+		StateHasChanged();
+	}
+
+	public async ValueTask DisposeAsync()
+	{
+		try
+		{
+			await StopAsync();
+			await module.DisposeAsync();
+		}
+		catch(JSDisconnectedException)
+		{
+			// Karta została zamknięta - przeglądarka sama zwolniła kamerę
+		}
+		finally
+		{
+			reference?.Dispose();
+		}		
+	}
 }
