@@ -1,8 +1,4 @@
 ﻿
-.camera-preview {
-    background: #888;
-    max-width: 1000px;
-    border-radius: 0.375rem;
-    width: 100%;
-    display: block;
+h1 {
+    color: blue;
 }
