@@ -88,4 +88,6 @@ app.MapCustomer();
 
 app.MapQrCode();
 
+app.MapSecurityEndpoints();
+
 app.Run();
