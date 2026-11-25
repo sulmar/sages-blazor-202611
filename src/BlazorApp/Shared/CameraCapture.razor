@@ -1,0 +1,35 @@
+﻿@using Microsoft.JSInterop
+@inject IJSRuntime JS
+
+<video autoplay muted playsinline class="rounded w-100" style="max-width:400px"></video>
+
+<div class="d-flex flex-wrap gap-2 mt-2">
+	<button type="button" @onclick="StartAsync" class="btn btn-outline-primary">Włącz kamerę</button>
+	<button type="button" @onclick="CaptureAsync" class="btn btn-primary">Zrób zdjęcie</button>
+	<button type="button" @onclick="StopAsync" class="btn btn-outline-secondary">Wyłącz kamerę</button>
+</div>
+
+
+@code {
+
+	[Parameter]
+	public EventCallback<Stream> OnCaptured { get; set;  }
+
+	private IJSObjectReference? module;
+
+	private async Task StartAsync()
+	{
+		module = await JS.InvokeAsync<IJSObjectReference>("import", "./js/channel.js");
+	}
+
+	private async Task CaptureAsync()
+	{
+		
+	}
+
+	private async Task StopAsync()
+	{
+		
+	}
+
+}
