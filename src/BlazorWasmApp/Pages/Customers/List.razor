@@ -1,5 +1,6 @@
 ﻿@page "/customers"
-@inject HttpClient Http
+@using BlazorWasmApp.Services
+@inject CustomerService Api
 
 <h3>Customer List</h3>
 
@@ -24,7 +25,7 @@ else
 
 	protected override async Task OnInitializedAsync()
 	{
-		customers = await Http.GetFromJsonAsync<IEnumerable<Customer>>("api/customers");
+		customers = await Api.GetAllAsync();
 	}
 
 }
