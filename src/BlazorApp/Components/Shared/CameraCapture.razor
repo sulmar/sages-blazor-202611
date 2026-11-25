@@ -5,9 +5,9 @@
 <video @ref="video" autoplay muted playsinline class="rounded w-100" style="max-width:400px; background: #111"></video>
 
 <div class="d-flex flex-wrap gap-2 mt-2">
-	<button type="button" @onclick="@StartAsync" class="btn btn-outline-primary">Włącz kamerę</button>
-	<button type="button" @onclick="@CaptureAsync" class="btn btn-primary">Zrób zdjęcie</button>
-	<button type="button" @onclick="@StopAsync" class="btn btn-outline-secondary">Wyłącz kamerę</button>
+	<button type="button" @onclick="@StartAsync" class="btn btn-outline-primary" disabled="@running">Włącz kamerę</button>
+	<button type="button" @onclick="@CaptureAsync" class="btn btn-primary" disabled="@(!running)">Zrób zdjęcie</button>
+	<button type="button" @onclick="@StopAsync" class="btn btn-outline-secondary" disabled="@(!running)">Wyłącz kamerę</button>
 </div>
 
 
@@ -31,6 +31,8 @@
 
 	private const long MaxPhotoSize = 5 * 1024 * 1024;
 
+	private bool running;
+
 	private async Task StartAsync()
 	{
 		try
@@ -40,6 +42,8 @@
 			reference = DotNetObjectReference.Create(this);
 
 			await module.InvokeVoidAsync("start", video, reference);
+
+			running = true;
 		}
 		catch(JSException)
 		{
@@ -67,6 +71,9 @@
 	{
 		if (module is not null)
 			await module.InvokeVoidAsync("stop", video);
+
+
+		running = false;
 	}
 
 
