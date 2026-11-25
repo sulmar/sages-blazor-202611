@@ -1,8 +1,10 @@
 ﻿@page "/customers" 
 @using BlazorApp.Services
+@using Microsoft.AspNetCore.Authorization
 @inject ICustomerRepository Repository
 @inject NavigationManager Navigation
 @inject DialogService Dialog
+@attribute [Authorize]
 
 <h3>Customer List</h3>
 
