@@ -22,14 +22,14 @@
                 <Authorized>
                     <span class="ms-4">👤 @context.User.Identity?.Name</span>
 
-                    @* Wylogowanie to zwykły formularz POST do punktu końcowego /logout (patrz SecurityExtensions). *@
-                    <form method="post" action="logout">
+                    @* Wylogowanie to zwykły formularz POST do punktu końcowego /account/logout (patrz SecurityExtensions). *@
+                    <form method="post" action="/account/logout">
                         <AntiforgeryToken />
                         <button type="submit" class="btn btn-link p-0">Wyloguj</button>
                     </form>
                 </Authorized>
                 <NotAuthorized>
-                    <a href="login">Zaloguj</a>
+                    <a href="/login">Zaloguj</a>
                 </NotAuthorized>
             </AuthorizeView>
 

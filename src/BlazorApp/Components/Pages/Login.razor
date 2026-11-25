@@ -1,0 +1,42 @@
+@page "/login"
+@using Microsoft.AspNetCore.Components.Forms
+
+<h3>Logowanie</h3>
+
+@if (errorMessage is not null)
+{
+    <div class="alert alert-danger" role="alert">@errorMessage</div>
+}
+
+@* Formularz wysyla dane do endpointu POST /account/login (patrz SecurityExtensions), ktory odpytuje IdentityProvider.Api. *@
+<form method="post" action="/account/login" class="col-md-4">
+    <AntiforgeryToken />
+    <input type="hidden" name="returnUrl" value="@ReturnUrl" />
+
+    <div class="mb-3">
+        <label for="username" class="form-label">Login</label>
+        <input id="username" name="username" class="form-control" autocomplete="username" required autofocus />
+    </div>
+
+    <div class="mb-3">
+        <label for="password" class="form-label">Hasło</label>
+        <input id="password" name="password" type="password" class="form-control" autocomplete="current-password" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Zaloguj</button>
+</form>
+
+@code {
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
+    [SupplyParameterFromQuery(Name = "error")]
+    public string? Error { get; set; }
+
+    private string? errorMessage => Error switch
+    {
+        "invalid" => "Nieprawidłowy login lub hasło.",
+        "server" => "Serwer logowania jest niedostępny. Spróbuj ponownie później.",
+        _ => null
+    };
+}
