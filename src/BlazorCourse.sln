@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shop.Api", "Shop.Api\Shop.A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorApp", "BlazorApp\BlazorApp.csproj", "{8B801DE3-DD9F-4785-9D0A-E372E816D905}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWasmApp", "BlazorWasmApp\BlazorWasmApp.csproj", "{57BB9526-D6F4-4CB0-844C-7E75C3D77444}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,18 @@ Global
 		{8B801DE3-DD9F-4785-9D0A-E372E816D905}.Release|x64.Build.0 = Release|Any CPU
 		{8B801DE3-DD9F-4785-9D0A-E372E816D905}.Release|x86.ActiveCfg = Release|Any CPU
 		{8B801DE3-DD9F-4785-9D0A-E372E816D905}.Release|x86.Build.0 = Release|Any CPU
+		{57BB9526-D6F4-4CB0-844C-7E75C3D77444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57BB9526-D6F4-4CB0-844C-7E75C3D77444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57BB9526-D6F4-4CB0-844C-7E75C3D77444}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{57BB9526-D6F4-4CB0-844C-7E75C3D77444}.Debug|x64.Build.0 = Debug|Any CPU
+		{57BB9526-D6F4-4CB0-844C-7E75C3D77444}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{57BB9526-D6F4-4CB0-844C-7E75C3D77444}.Debug|x86.Build.0 = Debug|Any CPU
+		{57BB9526-D6F4-4CB0-844C-7E75C3D77444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57BB9526-D6F4-4CB0-844C-7E75C3D77444}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57BB9526-D6F4-4CB0-844C-7E75C3D77444}.Release|x64.ActiveCfg = Release|Any CPU
+		{57BB9526-D6F4-4CB0-844C-7E75C3D77444}.Release|x64.Build.0 = Release|Any CPU
+		{57BB9526-D6F4-4CB0-844C-7E75C3D77444}.Release|x86.ActiveCfg = Release|Any CPU
+		{57BB9526-D6F4-4CB0-844C-7E75C3D77444}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
