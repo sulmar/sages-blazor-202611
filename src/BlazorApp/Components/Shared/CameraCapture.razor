@@ -2,7 +2,7 @@
 @inject IJSRuntime JS
 @implements IAsyncDisposable
 
-<video @ref="video" autoplay muted playsinline class="rounded w-100" style="max-width:400px; background: #111"></video>
+<video @ref="video" autoplay muted playsinline class="camera-preview"></video>
 
 <div class="d-flex flex-wrap gap-2 mt-2">
 	<button type="button" @onclick="@StartAsync" class="btn btn-outline-primary" disabled="@running">Włącz kamerę</button>
