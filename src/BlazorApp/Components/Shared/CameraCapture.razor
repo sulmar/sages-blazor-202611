@@ -2,12 +2,12 @@
 @inject IJSRuntime JS
 @implements IAsyncDisposable
 
-<video @ref="video" autoplay muted playsinline class="rounded w-100" style="max-width:400px"></video>
+<video @ref="video" autoplay muted playsinline class="rounded w-100" style="max-width:400px; background: #111"></video>
 
 <div class="d-flex flex-wrap gap-2 mt-2">
-	<button type="button" @onclick="StartAsync" class="btn btn-outline-primary">Włącz kamerę</button>
-	<button type="button" @onclick="CaptureAsync" class="btn btn-primary">Zrób zdjęcie</button>
-	<button type="button" @onclick="StopAsync" class="btn btn-outline-secondary">Wyłącz kamerę</button>
+	<button type="button" @onclick="@StartAsync" class="btn btn-outline-primary">Włącz kamerę</button>
+	<button type="button" @onclick="@CaptureAsync" class="btn btn-primary">Zrób zdjęcie</button>
+	<button type="button" @onclick="@StopAsync" class="btn btn-outline-secondary">Wyłącz kamerę</button>
 </div>
 
 
@@ -15,7 +15,7 @@
 {
 	<p class="text-danger" role="alert">@error</p>
 }
-
+ 
 @code {
 
 	[Parameter]
@@ -35,7 +35,7 @@
 	{
 		try
 		{
-			module = await JS.InvokeAsync<IJSObjectReference>("import", "./Shared/CameraCapture.razor.js");
+			module = await JS.InvokeAsync<IJSObjectReference>("import", "./Components/Shared/CameraCapture.razor.js");
 
 			reference = DotNetObjectReference.Create(this);
 
@@ -65,7 +65,8 @@
 
 	private async Task StopAsync()
 	{
-		await module.InvokeVoidAsync("stop", video);
+		if (module is not null)
+			await module.InvokeVoidAsync("stop", video);
 	}
 
 
@@ -82,8 +83,11 @@
 	{
 		try
 		{
-			await StopAsync();
-			await module.DisposeAsync();
+			if (module is not null)
+			{
+				await StopAsync();
+				await module.DisposeAsync();
+			}
 		}
 		catch(JSDisconnectedException)
 		{
